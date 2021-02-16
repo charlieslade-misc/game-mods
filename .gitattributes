@@ -1,0 +1,21 @@
+* text eol=lf
+
+*.cfg text
+*.conf text
+*.config text
+*.gradle text
+*.html text
+*.java text
+*.json text
+*.md text
+*.properties text
+*.py text
+*.service text
+*.sh text
+*.sql text
+*.txt text
+*.xml text
+*.yml text
+
+*.jar binary
+*.zip binary

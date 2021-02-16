@@ -1,0 +1,147 @@
+﻿===================================================base===================================================
+
+Cossacks 3 small modification tweaks.
+
+==========================================================================================================
+
+
+
+===================================================info===================================================
+
+++++++++++++++++++++++++++++++batch++++++++++++++++++++++++++++++
+
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+++++++++++++++++++++++++++++++balance+++++++++++++++++++++++++++++
+
+//##balance
+-) x5 unit cost:
+	-- tweak {<root>/data/scripts/lib/unit.script}:
+	'
+		SetObjBasePrice(objbase, 110, 5, 0, 10, 0, 0);
+
+		+
+
+		SetObjBasePrice(objbase, 40, 0, 0, 45{35;45}, 40{45}, 0);
+
+		+
+
+		SetObjBasePrice(objbase, 160, 0, 0, 13, {c1 was 35}25, 0);
+
+		+
+
+		procedure SetObjBasePrice(var objbase : TObjBase; food, wood, stone, gold, iron, coal : Integer);
+		begin
+			objbase.price[gc_resource_type_food] := food;
+			objbase.price[gc_resource_type_wood] := wood;
+			objbase.price[gc_resource_type_stone] := stone;
+			objbase.price[gc_resource_type_gold] := gold;
+			objbase.price[gc_resource_type_iron] := iron;
+			objbase.price[gc_resource_type_coal] := coal;
+		end;
+
+		+
+
+		objprop.consume[gc_resource_type_food] := floor(gc_obj_foodperunit*1.5);
+	'
+	-- conditions can be used in order to exclude artillery / ships / buildings:
+		//alternatively we can use HP condition inside function: `objbase.maxhp  < 400` -- simple unit or fish boat
+		-- ships: 
+		'
+			wood > 500
+		'
+		-- art:
+		'
+			wood within [100, 300]
+		'
+		-- buildings:
+		'
+			previous line is like: `SetObjBuildingProperties(objprop, objbase, 10000, 100, 100);`
+		'
+
+-) x5 unit build time:
+	-- tweak {<root>/data/scripts/lib/unit.script}:
+		-- globally can be set in `SetObjBaseSearchBuildVisionScore`;
+		-- extra threshold condition: `if result < 200, then 200;`;
+	-- also tweak default value {<root>/data/scripts/lib/classes.script}:
+		-- `buildtime := 64*gc_frames_to_time*10; //x10`
+
+-) unit consumption:
+	-- gold:
+		-- comment out current gold consumers:
+		'
+			count(objprop.consume[gc_resource_type_gold]) //35 members
+		'
+		-- each unit now consumes 5%-10% of its cost value;
+		-- if unit has 0 gold cost, then consumption should be = 1 gold;
+		-- special fixes for officers / hetman / mercenaries:
+			-- setting consumption.gold = 50% in case of:
+				-- if unit `cost.gold (before x5) > 100`; //officers/hetman case (tur officer 17 is OP with this condition)
+				-- if unit cost contains only gold; //mercenaries
+	-- food consumption can be globally tweaked in: {<root>/data/scripts/dmscript.global}:
+	'
+		gc_obj_foodperunit = 30;
+	'
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+++++++++++++++++++++++++++++++scotland+++++++++++++++++++++++++++++
+
+//##scotland
+-) enabling Scotland nation;
+-) tweak {<root>/data/scripts/dmscript.global}:
+'
+   //gc_MaxCountryCountRelease = 13; //##country; ##sco; ##old
+   gc_MaxCountryCountRelease = 24; //##country; ##sco; ##fix
+'
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+++++++++++++++++++++++++++++++mines_cost+++++++++++++++++++++++++++
+
+//##mine; ##upgrade
+-) disables all mine upgrades except the first one (by making them crazy expensive);
+-) tweak {<root>/data/scripts/lib/country.script}:
+'
+         _country_AddUpgradeWithAccessControl(country, upgplace+'.1', 2, gc_upg_tooltiptype_none, gc_upg_type_single_inside_mine, 5, cTrue, 300, 2, 2, ind, 1000, 0, 0, 1250, 0, 0, bAddIfNotExist, 0, 0, 0, 'eur'+member, '', '', '', '', '', '', '', '', '', True, '', '', '', '', '', '', '', '');
+         country.upgrade[ind-1].bindividual := True;
+         //##balance; ##mine; ##fix------------------------------------------------------------------------------------------
+         _country_AddUpgradeWithAccessControl(country, upgplace+'.2', 3, gc_upg_tooltiptype_none, gc_upg_type_single_inside_mine, 8, False, 300, 2, 2, ind, 5250000, 0, 0, 4950000, 0, 0, bAddIfNotExist, 0, 0, 0, 'eur'+member, '', '', '', '', '', '', '', '', '', True, '', '', '', '', '', '', '', '');
+         country.upgrade[ind-1].bindividual := True;
+         _country_AddUpgradeWithAccessControl(country, upgplace+'.3', 4, gc_upg_tooltiptype_none, gc_upg_type_single_inside_mine, 10, False, 300, 2, 2, ind, 12500000, 0, 0, 9250000, 0, 0, bAddIfNotExist, 0, 0, 0, 'eur'+member, '', '', '', '', '', '', '', '', '', True, '', '', '', '', '', '', '', '');
+         country.upgrade[ind-1].bindividual := True;
+         _country_AddUpgradeWithAccessControl(country, upgplace+'.4', 5, gc_upg_tooltiptype_none, gc_upg_type_single_inside_mine, 12, False, 300, 2, 2, ind, 15800000, 0, 0, 18500000, 0, 0, bAddIfNotExist, 0, 0, 0, 'eur'+member, '', '', '', '', '', '', '', '', '', True, req0, '', '', '', '', '', '', '');
+         country.upgrade[ind-1].bindividual := True;
+         _country_AddUpgradeWithAccessControl(country, upgplace+'.5', 6, gc_upg_tooltiptype_none, gc_upg_type_single_inside_mine, 15, False, 300, 2, 2, ind, 19800000, 0, 0, 21050000, 0, 0, bAddIfNotExist, 0, 0, 0, 'eur'+member, '', '', '', '', '', '', '', '', '', True, req0, '', '', '', '', '', '', '');
+         country.upgrade[ind-1].bindividual := True;
+         _country_AddUpgradeWithAccessControl(country, upgplace+'.6', 7, gc_upg_tooltiptype_none, gc_upg_type_single_inside_mine, 40, False, 300, 2, 2, ind, 50200000, 0, 0, 25950000, 0, 0, bAddIfNotExist, 0, 0, 0, 'eur'+member, '', '', '', '', '', '', '', '', '', True, req0, '', '', '', '', '', '', '');
+         country.upgrade[ind-1].bindividual := True;
+         //##balance; ##mine; ##fix------------------------------------------------------------------------------------------
+'
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+++++++++++++++++++++++++++++++black_color+++++++++++++++++++++++++++
+
+//##black; ##color
+-) modifies purple nation color to black;
+-) still keep purple color on the map;
+-) tweak {<root>/data/scripts/lib/classes.script}:
+'
+         //3 : begin ir := 127; ig := 50; ib := 190; end; //##color; ##black; ##old
+         3 : begin ir := 50; ig := 50; ib := 50; end; //##color; ##black; ##fix
+'
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+==========================================================================================================
