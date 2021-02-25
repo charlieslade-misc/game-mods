@@ -1,6 +1,6 @@
 # Games custom mods
 
-Version: `0.5.0`
+Version: `0.5.1`
 
 Games:
 - `cossacks` (*Cossacks 3*):

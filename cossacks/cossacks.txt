@@ -18,9 +18,15 @@ Cossacks 3 small modification tweaks.
 
 ++++++++++++++++++++++++++++++balance+++++++++++++++++++++++++++++
 
+-) script files references:
+    -- `##unit`: `{<root>/data/scripts/lib/unit.script}`
+    -- `##classes`: `{<root>/data/scripts/lib/classes.script}`
+    -- `##country`: `{<root>/data/scripts/lib/country.script}`
+    -- `##global`: `{<root>/data/scripts/dmscript.global}`
+
 //##balance
 -) x5 unit cost:
-	-- tweak {<root>/data/scripts/lib/unit.script}:
+	-- tweak `##unit`:
 	'
 		SetObjBasePrice(objbase, 110, 5, 0, 10, 0, 0);
 
@@ -64,11 +70,15 @@ Cossacks 3 small modification tweaks.
 		'
 
 -) x5 unit build time:
-	-- tweak {<root>/data/scripts/lib/unit.script}:
+	-- tweak `##unit`:
 		-- globally can be set in `SetObjBaseSearchBuildVisionScore`;
 		-- extra threshold condition: `if result < 200, then 200;`;
-	-- also tweak default value {<root>/data/scripts/lib/classes.script}:
+	-- also tweak default value `##classes`:
 		-- `buildtime := 64*gc_frames_to_time*10; //x10`
+	-- might also want to reduce university perk (-75% build time) in `##country`:
+	'
+	    _country_AddUpgrade(country, upgplace+'.10', 1, gc_upg_tooltiptype_none, gc_upg_type_buildtimeperc, -7500000, cTrue, 500, 3, 0, ind, 0, 0, 0, 6950, 0, 0, bAddIfNotExist, 0, 0, 0, '', '', '', '', '', '', '', '', '', '');
+	'
 
 -) unit consumption:
 	-- gold:
@@ -82,7 +92,7 @@ Cossacks 3 small modification tweaks.
 			-- setting consumption.gold = 50% in case of:
 				-- if unit `cost.gold (before x5) > 100`; //officers/hetman case (tur officer 17 is OP with this condition)
 				-- if unit cost contains only gold; //mercenaries
-	-- food consumption can be globally tweaked in: {<root>/data/scripts/dmscript.global}:
+	-- food consumption can be globally tweaked in `##global`:
 	'
 		gc_obj_foodperunit = 30;
 	'
@@ -95,7 +105,7 @@ Cossacks 3 small modification tweaks.
 
 //##scotland
 -) enabling Scotland nation;
--) tweak {<root>/data/scripts/dmscript.global}:
+-) tweak `##global`:
 '
    //gc_MaxCountryCountRelease = 13; //##country; ##sco; ##old
    gc_MaxCountryCountRelease = 24; //##country; ##sco; ##fix
@@ -108,21 +118,21 @@ Cossacks 3 small modification tweaks.
 ++++++++++++++++++++++++++++++mines_cost+++++++++++++++++++++++++++
 
 //##mine; ##upgrade
--) disables all mine upgrades except the first one (by making them crazy expensive);
--) tweak {<root>/data/scripts/lib/country.script}:
+-) reduce the effectiveness of mine upgrades;
+-) tweak `##country`:
 '
-         _country_AddUpgradeWithAccessControl(country, upgplace+'.1', 2, gc_upg_tooltiptype_none, gc_upg_type_single_inside_mine, 5, cTrue, 300, 2, 2, ind, 1000, 0, 0, 1250, 0, 0, bAddIfNotExist, 0, 0, 0, 'eur'+member, '', '', '', '', '', '', '', '', '', True, '', '', '', '', '', '', '', '');
+         _country_AddUpgradeWithAccessControl(country, upgplace+'.1', 2, gc_upg_tooltiptype_none, gc_upg_type_single_inside_mine, 3, cTrue, 300, 2, 2, ind, 1000, 0, 0, 1250, 0, 0, bAddIfNotExist, 0, 0, 0, 'eur'+member, '', '', '', '', '', '', '', '', '', True, '', '', '', '', '', '', '', '');
          country.upgrade[ind-1].bindividual := True;
          //##balance; ##mine; ##fix------------------------------------------------------------------------------------------
-         _country_AddUpgradeWithAccessControl(country, upgplace+'.2', 3, gc_upg_tooltiptype_none, gc_upg_type_single_inside_mine, 8, False, 300, 2, 2, ind, 5250000, 0, 0, 4950000, 0, 0, bAddIfNotExist, 0, 0, 0, 'eur'+member, '', '', '', '', '', '', '', '', '', True, '', '', '', '', '', '', '', '');
+         _country_AddUpgradeWithAccessControl(country, upgplace+'.2', 3, gc_upg_tooltiptype_none, gc_upg_type_single_inside_mine, 3, False, 300, 2, 2, ind, 5250, 0, 0, 4950, 0, 0, bAddIfNotExist, 0, 0, 0, 'eur'+member, '', '', '', '', '', '', '', '', '', True, '', '', '', '', '', '', '', '');
          country.upgrade[ind-1].bindividual := True;
-         _country_AddUpgradeWithAccessControl(country, upgplace+'.3', 4, gc_upg_tooltiptype_none, gc_upg_type_single_inside_mine, 10, False, 300, 2, 2, ind, 12500000, 0, 0, 9250000, 0, 0, bAddIfNotExist, 0, 0, 0, 'eur'+member, '', '', '', '', '', '', '', '', '', True, '', '', '', '', '', '', '', '');
+         _country_AddUpgradeWithAccessControl(country, upgplace+'.3', 4, gc_upg_tooltiptype_none, gc_upg_type_single_inside_mine, 3, False, 300, 2, 2, ind, 12500, 0, 0, 9250, 0, 0, bAddIfNotExist, 0, 0, 0, 'eur'+member, '', '', '', '', '', '', '', '', '', True, '', '', '', '', '', '', '', '');
          country.upgrade[ind-1].bindividual := True;
-         _country_AddUpgradeWithAccessControl(country, upgplace+'.4', 5, gc_upg_tooltiptype_none, gc_upg_type_single_inside_mine, 12, False, 300, 2, 2, ind, 15800000, 0, 0, 18500000, 0, 0, bAddIfNotExist, 0, 0, 0, 'eur'+member, '', '', '', '', '', '', '', '', '', True, req0, '', '', '', '', '', '', '');
+         _country_AddUpgradeWithAccessControl(country, upgplace+'.4', 5, gc_upg_tooltiptype_none, gc_upg_type_single_inside_mine, 3, False, 300, 2, 2, ind, 15800, 0, 0, 18500, 0, 0, bAddIfNotExist, 0, 0, 0, 'eur'+member, '', '', '', '', '', '', '', '', '', True, req0, '', '', '', '', '', '', '');
          country.upgrade[ind-1].bindividual := True;
-         _country_AddUpgradeWithAccessControl(country, upgplace+'.5', 6, gc_upg_tooltiptype_none, gc_upg_type_single_inside_mine, 15, False, 300, 2, 2, ind, 19800000, 0, 0, 21050000, 0, 0, bAddIfNotExist, 0, 0, 0, 'eur'+member, '', '', '', '', '', '', '', '', '', True, req0, '', '', '', '', '', '', '');
+         _country_AddUpgradeWithAccessControl(country, upgplace+'.5', 6, gc_upg_tooltiptype_none, gc_upg_type_single_inside_mine, 3, False, 300, 2, 2, ind, 19800, 0, 0, 21050, 0, 0, bAddIfNotExist, 0, 0, 0, 'eur'+member, '', '', '', '', '', '', '', '', '', True, req0, '', '', '', '', '', '', '');
          country.upgrade[ind-1].bindividual := True;
-         _country_AddUpgradeWithAccessControl(country, upgplace+'.6', 7, gc_upg_tooltiptype_none, gc_upg_type_single_inside_mine, 40, False, 300, 2, 2, ind, 50200000, 0, 0, 25950000, 0, 0, bAddIfNotExist, 0, 0, 0, 'eur'+member, '', '', '', '', '', '', '', '', '', True, req0, '', '', '', '', '', '', '');
+         _country_AddUpgradeWithAccessControl(country, upgplace+'.6', 7, gc_upg_tooltiptype_none, gc_upg_type_single_inside_mine, 3, False, 300, 2, 2, ind, 50200, 0, 0, 25950, 0, 0, bAddIfNotExist, 0, 0, 0, 'eur'+member, '', '', '', '', '', '', '', '', '', True, req0, '', '', '', '', '', '', '');
          country.upgrade[ind-1].bindividual := True;
          //##balance; ##mine; ##fix------------------------------------------------------------------------------------------
 '
@@ -136,7 +146,7 @@ Cossacks 3 small modification tweaks.
 //##black; ##color
 -) modifies purple nation color to black;
 -) still keep purple color on the map;
--) tweak {<root>/data/scripts/lib/classes.script}:
+-) tweak `##classes`:
 '
          //3 : begin ir := 127; ig := 50; ib := 190; end; //##color; ##black; ##old
          3 : begin ir := 50; ig := 50; ib := 50; end; //##color; ##black; ##fix
